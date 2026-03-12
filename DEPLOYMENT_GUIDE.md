@@ -62,17 +62,19 @@
 
 ### 第三步：部署前端到Vercel
 
+#### 方法A：手动指定根目录（推荐）
+
 1. **注册Vercel账号**
    - 访问 https://vercel.com
    - 使用GitHub账号登录
 
 2. **导入项目**
    - 点击"New Project"
-   - 选择您的电商产品激活系统仓库
-   - 选择`frontend`目录作为根目录
+   - 选择您的GitHub仓库：`final0919/Product-activation-system`
 
 3. **配置项目设置**
-   - **Framework Preset**: Create React App
+   - **Framework Preset**: `Create React App`
+   - **Root Directory**: 点击"Edit"按钮，输入 `frontend`
    - **Build Command**: `npm run build`
    - **Output Directory**: `build`
 
@@ -87,6 +89,18 @@
    - 点击"Deploy"
    - 等待构建和部署完成
    - 获得前端域名（如：https://your-app.vercel.app）
+
+#### 方法B：使用项目级配置
+
+如果方法A不行，项目根目录已经包含`vercel.json`配置文件，Vercel会自动识别：
+
+1. **直接导入项目**
+   - Vercel会自动使用根目录的`vercel.json`配置
+   - 无需手动设置根目录
+
+2. **设置环境变量**（同上）
+
+3. **部署**（同上）
 
 ### 第四步：测试部署
 
