@@ -1,0 +1,20 @@
+[phases.setup]
+cmds = [
+    ["npm", "install"],
+]
+
+[phases.install]
+cmds = [
+    ["echo", "No additional install steps required"],
+]
+
+[phases.build]
+cmds = [
+    ["echo", "No build step required for Node.js backend"],
+]
+
+[start]
+cmd = ["npm", "start"]
+
+[environment]
+NODE_ENV = "production"
