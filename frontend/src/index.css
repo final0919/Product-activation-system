@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-50 text-slate-900;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply antialiased;
+    background:
+      radial-gradient(900px 500px at 10% 0%, rgba(59, 130, 246, 0.12), transparent 60%),
+      radial-gradient(800px 450px at 90% 10%, rgba(99, 102, 241, 0.10), transparent 55%),
+      linear-gradient(to bottom, #f8fafc, #fff);
+  }
+
+  a {
+    @apply text-blue-600 hover:text-blue-800;
+  }
+}
+
+@layer components {
+  .app-shell {
+    @apply min-h-screen;
+  }
+
+  .app-container {
+    @apply w-full max-w-5xl mx-auto px-4 sm:px-6;
+  }
+
+  .surface {
+    @apply bg-white/80 backdrop-blur border border-gray-200 rounded-2xl shadow-soft;
+  }
+
+  .card {
+    @apply surface p-6 sm:p-8;
+  }
+
+  .section-title {
+    @apply text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900;
+  }
+
+  .muted {
+    @apply text-slate-600;
+  }
+
+  .input {
+    @apply w-full px-4 py-2.5 rounded-xl bg-white border border-brand-200
+      placeholder:text-slate-400 text-slate-900
+      focus:outline-none focus:ring-4 focus:ring-brand-200/60 focus:border-brand-400;
+  }
+
+  .textarea {
+    @apply input min-h-24;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold
+      transition active:scale-[0.99] disabled:opacity-60 disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-500 text-white hover:bg-brand-600 shadow;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white border border-brand-200 text-slate-900 hover:bg-brand-50;
+  }
+
+  .btn-danger {
+    @apply btn bg-rose-600 text-white hover:bg-rose-700 shadow;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold
+      bg-brand-100 text-brand-900 border border-brand-200;
+  }
+
+  .alert {
+    @apply rounded-xl border px-4 py-3 text-sm;
+  }
+
+  .alert-error {
+    @apply alert bg-rose-50 border-rose-200 text-rose-800;
+  }
+
+  .alert-success {
+    @apply alert bg-emerald-50 border-emerald-200 text-emerald-800;
+  }
+
+  .divider {
+    @apply border-t border-brand-100 my-6;
+  }
+
+  .nav {
+    @apply surface px-4 py-3 sm:px-6 sm:py-4;
+  }
+
+  .nav-list {
+    @apply flex flex-wrap items-center gap-3 sm:gap-4;
+  }
+
+  .nav-link {
+    @apply inline-flex items-center rounded-xl px-3 py-2 font-semibold text-slate-700 hover:bg-brand-50 hover:text-slate-900;
+  }
+
+  .nav-link-active {
+    @apply bg-brand-100 text-brand-900;
+  }
+}
