@@ -7,8 +7,8 @@ const Product = require('../models/Product');
 
 // @route   GET api/products
 // @desc    Get all products
-// @access  Private (for all authenticated users)
-router.get('/', auth, async (req, res) => {
+// @access  Public (allow unauthenticated access for product listing)
+router.get('/', async (req, res) => {
   try {
     const products = await Product.find();
     res.json(products);
@@ -22,13 +22,15 @@ router.get('/', auth, async (req, res) => {
 // @desc    Create a product
 // @access  Admin
 router.post('/', [auth, admin], async (req, res) => {
-  const { name, url, description } = req.body;
+  const { name, url, image, description, requiresActivation } = req.body;
 
   try {
     const newProduct = new Product({
       name,
       url,
+      image: image || '', // 添加图片字段
       description,
+      requiresActivation: requiresActivation !== undefined ? Boolean(requiresActivation) : true, // 确保布尔值正确处理
     });
 
     const product = await newProduct.save();
@@ -43,13 +45,18 @@ router.post('/', [auth, admin], async (req, res) => {
 // @desc    Update a product
 // @access  Admin
 router.put('/:id', [auth, admin], async (req, res) => {
-  const { name, url, description } = req.body;
+  const { name, url, image, description, requiresActivation } = req.body;
 
   // Build product object
   const productFields = {};
-  if (name) productFields.name = name;
-  if (url) productFields.url = url;
-  if (description) productFields.description = description;
+  if (name !== undefined) productFields.name = name;
+  if (url !== undefined) productFields.url = url;
+  if (image !== undefined) productFields.image = image;
+  if (description !== undefined) productFields.description = description;
+  if (requiresActivation !== undefined) {
+    // 确保布尔值正确处理
+    productFields.requiresActivation = Boolean(requiresActivation);
+  }
 
   try {
     let product = await Product.findById(req.params.id);
