@@ -149,14 +149,22 @@ const Products = () => {
               <div className="flex-1 space-y-4">
                 {/* 产品图片 */}
                 {product.image && product.image.trim() !== '' ? (
-                  <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                  <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden relative">
                     <img 
                       src={product.image} 
                       alt={product.name}
                       className="w-full h-full object-cover"
                       onError={(e) => {
+                        // 图片加载失败时显示占位符
                         e.target.style.display = 'none';
-                        e.target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center"><span class="text-gray-400 text-sm">图片加载失败</span></div>';
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'w-full h-full flex items-center justify-center bg-gray-100';
+                        placeholder.innerHTML = '<span class="text-gray-400 text-sm">图片加载失败</span>';
+                        e.target.parentElement.appendChild(placeholder);
+                      }}
+                      onLoad={(e) => {
+                        // 图片加载成功时确保显示
+                        e.target.style.display = 'block';
                       }}
                     />
                   </div>
@@ -178,7 +186,9 @@ const Products = () => {
               {/* 状态和操作 - 固定在底部 */}
               <div className="mt-auto pt-4">
                 <div className="text-center">
-                  <span className="text-sm text-gray-500">请登录后查看激活状态</span>
+                  <span className={`badge ${!product.requiresActivation ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}`}>
+                    {!product.requiresActivation ? '开放产品' : '需激活'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -196,7 +206,7 @@ const Products = () => {
                 <div className="flex-1 space-y-4">
                   {/* 产品图片 */}
                   {product.image && product.image.trim() !== '' ? (
-                    <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                    <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden relative">
                       <img 
                         src={product.image} 
                         alt={product.name}
@@ -204,10 +214,13 @@ const Products = () => {
                         onError={(e) => {
                           // 图片加载失败时显示占位符
                           e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center"><span class="text-gray-400 text-sm">图片加载失败</span></div>';
+                          const placeholder = document.createElement('div');
+                          placeholder.className = 'w-full h-full flex items-center justify-center bg-gray-100';
+                          placeholder.innerHTML = '<span class="text-gray-400 text-sm">图片加载失败</span>';
+                          e.target.parentElement.appendChild(placeholder);
                         }}
                         onLoad={(e) => {
-                          // 图片加载成功时显示
+                          // 图片加载成功时确保显示
                           e.target.style.display = 'block';
                         }}
                       />
@@ -230,7 +243,7 @@ const Products = () => {
                 {/* 状态和操作 - 固定在底部 */}
                 <div className="mt-auto pt-4">
                   <div className="flex items-center justify-between">
-                    <span className={`badge ${canAccess ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'} ${!product.requiresActivation ? 'bg-purple-100 text-purple-800' : ''}`}>
+                    <span className={`badge ${!product.requiresActivation ? 'bg-purple-100 text-purple-800' : (canAccess ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')}`}>
                       {!product.requiresActivation ? '开放产品' : (canAccess ? '已激活' : '未激活')}
                     </span>
                     
