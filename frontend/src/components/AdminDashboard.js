@@ -412,17 +412,22 @@ const AdminDashboard = () => {
                 className="textarea"
                 placeholder="产品描述"
               />
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     name="requiresActivation"
                     checked={newProduct.requiresActivation}
                     onChange={(e) => setNewProduct({ ...newProduct, requiresActivation: e.target.checked })}
-                    className="w-4 h-4 text-brand-600 border-gray-300 rounded focus:ring-brand-500"
+                    className="w-5 h-5 text-brand-600 border-gray-300 rounded focus:ring-brand-500"
                   />
-                  <span className="text-sm text-slate-700">需要激活码激活</span>
+                  <span className="text-sm font-medium text-slate-700">需要激活码激活</span>
                 </label>
+                <div className="ml-auto flex items-center gap-2">
+                  <span className={`badge ${newProduct.requiresActivation ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                    {newProduct.requiresActivation ? '需激活' : '开放产品'}
+                  </span>
+                </div>
               </div>
               <button type="submit" className="btn-primary w-full sm:w-auto">
                 创建产品
@@ -433,9 +438,9 @@ const AdminDashboard = () => {
 
             <div className="space-y-3">
               <div className="font-semibold text-slate-900">所有产品</div>
-              <div className="space-y-3">
+              <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
                 {products.map((product) => (
-                  <div key={product._id} className="bg-white/70 border border-brand-100 rounded-2xl p-4 space-y-3">
+                  <div key={product._id} className="bg-white/70 border border-brand-100 rounded-2xl p-4 space-y-3 min-h-[120px]">
                     {editingProduct && editingProduct._id === product._id ? (
                       <form onSubmit={handleUpdateProduct} className="space-y-3">
                         <input
@@ -508,17 +513,22 @@ const AdminDashboard = () => {
                 className="textarea"
                 placeholder="产品描述"
               />
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     name="requiresActivation"
                     checked={Boolean(editingProduct.requiresActivation)}
                     onChange={(e) => setEditingProduct({ ...editingProduct, requiresActivation: e.target.checked })}
-                    className="w-4 h-4 text-brand-600 border-gray-300 rounded focus:ring-brand-500"
+                    className="w-5 h-5 text-brand-600 border-gray-300 rounded focus:ring-brand-500"
                   />
-                  <span className="text-sm text-slate-700">需要激活码激活</span>
+                  <span className="text-sm font-medium text-slate-700">需要激活码激活</span>
                 </label>
+                <div className="ml-auto flex items-center gap-2">
+                  <span className={`badge ${editingProduct.requiresActivation ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                    {editingProduct.requiresActivation ? '需激活' : '开放产品'}
+                  </span>
+                </div>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button type="submit" className="btn-primary">
@@ -531,7 +541,7 @@ const AdminDashboard = () => {
                       </form>
                     ) : (
                       <div className="space-y-3">
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-start gap-3 flex-wrap">
                           {product.image && product.image.trim() !== '' ? (
                             <div className="relative">
                               <img 
@@ -563,8 +573,8 @@ const AdminDashboard = () => {
                             </div>
                           )}
                           <div className="min-w-0 flex-1">
-                            <div className="flex items-start justify-between gap-3">
-                              <div className="min-w-0">
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                              <div className="min-w-0 flex-1">
                                 <div className="font-semibold text-slate-900 break-words">{product.name}</div>
                                 {product.description ? <p className="muted text-sm mt-1">{product.description}</p> : null}
                                 {product.url ? (
@@ -578,11 +588,11 @@ const AdminDashboard = () => {
                                   </a>
                                 ) : null}
                               </div>
-                              <div className="flex flex-col gap-1 items-end">
-                                <span className={`badge ${product.requiresActivation ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'} shrink-0`}>
+                              <div className="flex flex-row sm:flex-col gap-2 sm:items-end items-center justify-end flex-shrink-0">
+                                <span className={`badge ${product.requiresActivation ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'} shrink-0 text-xs sm:text-sm`}>
                                   {product.requiresActivation ? '需激活' : '开放产品'}
                                 </span>
-                                <span className="badge shrink-0">产品</span>
+                                <span className="badge shrink-0 text-xs sm:text-sm">产品</span>
                               </div>
                             </div>
                           </div>
