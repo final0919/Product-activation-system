@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../config/api';
+import ImageWithFallback from './ImageWithFallback';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -148,31 +149,15 @@ const Products = () => {
             <div key={product._id} className="surface p-5 flex flex-col h-full">
               <div className="flex-1 space-y-4">
                 {/* 产品图片 */}
-                {product.image && product.image.trim() !== '' ? (
-                  <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden relative">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        // 图片加载失败时显示占位符
-                        e.target.style.display = 'none';
-                        const placeholder = document.createElement('div');
-                        placeholder.className = 'w-full h-full flex items-center justify-center bg-gray-100';
-                        placeholder.innerHTML = '<span class="text-gray-400 text-sm">图片加载失败</span>';
-                        e.target.parentElement.appendChild(placeholder);
-                      }}
-                      onLoad={(e) => {
-                        // 图片加载成功时确保显示
-                        e.target.style.display = 'block';
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                    <span className="text-gray-400 text-sm">暂无图片</span>
-                  </div>
-                )}
+                <div className="aspect-video">
+                  <ImageWithFallback
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full rounded-lg"
+                    fallbackText="暂无图片"
+                    loadingText="加载中..."
+                  />
+                </div>
                 
                 {/* 产品信息 */}
                 <div className="space-y-2 flex-1">
@@ -205,31 +190,15 @@ const Products = () => {
               <div key={product._id} className="surface p-5 flex flex-col h-full">
                 <div className="flex-1 space-y-4">
                   {/* 产品图片 */}
-                  {product.image && product.image.trim() !== '' ? (
-                    <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden relative">
-                      <img 
-                        src={product.image} 
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          // 图片加载失败时显示占位符
-                          e.target.style.display = 'none';
-                          const placeholder = document.createElement('div');
-                          placeholder.className = 'w-full h-full flex items-center justify-center bg-gray-100';
-                          placeholder.innerHTML = '<span class="text-gray-400 text-sm">图片加载失败</span>';
-                          e.target.parentElement.appendChild(placeholder);
-                        }}
-                        onLoad={(e) => {
-                          // 图片加载成功时确保显示
-                          e.target.style.display = 'block';
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                      <span className="text-gray-400 text-sm">暂无图片</span>
-                    </div>
-                  )}
+                  <div className="aspect-video">
+                    <ImageWithFallback
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full rounded-lg"
+                      fallbackText="暂无图片"
+                      loadingText="加载中..."
+                    />
+                  </div>
                   
                   {/* 产品信息 */}
                   <div className="space-y-2 flex-1">
