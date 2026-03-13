@@ -47,7 +47,7 @@ router.post('/activate-product', auth, async (req, res) => {
 // @route   PUT api/users/:userId/products
 // @desc    Update a user's activated products (Admin)
 // @access  Private
-router.put('/:userId/products', auth, async (req, res) => {
+router.put('/:userId/products', [auth, admin], async (req, res) => {
   // Here you would add a check to ensure the logged-in user is an admin
   // For now, we'll assume any authenticated user can do this for simplicity.
 
@@ -73,7 +73,7 @@ router.put('/:userId/products', auth, async (req, res) => {
 // @route   GET api/users
 // @desc    Get all users (Admin)
 // @access  Private
-router.get('/', auth, async (req, res) => {
+router.get('/', [auth, admin], async (req, res) => {
   try {
     const users = await User.find().select('-password').populate('activatedProducts', ['name']);
     res.json(users);
@@ -90,6 +90,25 @@ router.get('/me', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password').populate('activatedProducts');
     res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   DELETE api/users/:id
+// @desc    Delete a user (Admin)
+// @access  Private
+router.delete('/:id', [auth, admin], async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+    
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ msg: 'User deleted' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
