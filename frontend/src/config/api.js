@@ -1,5 +1,5 @@
 // API配置
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://precious-dedication-production.up.railway.app';
 
 export const API_ENDPOINTS = {
   AUTH: {
