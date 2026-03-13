@@ -5,6 +5,7 @@ import { API_ENDPOINTS } from '../config/api';
 const AdminDashboard = () => {
   // Product Management States
   const [products, setProducts] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [productError, setProductError] = useState('');
   const [newProduct, setNewProduct] = useState({ name: '', url: '', image: '', description: '', requiresActivation: true });
@@ -12,12 +13,14 @@ const AdminDashboard = () => {
 
   // Activation Code States
   const [codes, setCodes] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [loadingCodes, setLoadingCodes] = useState(true);
   const [codeError, setCodeError] = useState('');
   const [newCode, setNewCode] = useState({ code: '', products: [] });
 
   // User Management States
   const [users, setUsers] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [loadingUsers, setLoadingUsers] = useState(true);
   const [userError, setUserError] = useState('');
   const [editingUser, setEditingUser] = useState(null);
