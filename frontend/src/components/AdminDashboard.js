@@ -143,6 +143,10 @@ const AdminDashboard = () => {
         } else {
           setNewProduct({ ...newProduct, image: base64Data });
         }
+        setMessage('图片上传成功');
+      };
+      reader.onerror = () => {
+        setMessage('图片上传失败，请重试');
       };
       reader.readAsDataURL(file);
     }
@@ -173,7 +177,7 @@ const AdminDashboard = () => {
     try {
       await axios.post(API_ENDPOINTS.PRODUCTS, newProduct);
       setMessage('产品创建成功！');
-      setNewProduct({ name: '', url: '', image: '', description: '' });
+      setNewProduct({ name: '', url: '', image: '', description: '', requiresActivation: true });
       await fetchProducts();
     } catch (err) {
       setMessage('Failed to create product.');
@@ -197,12 +201,22 @@ const AdminDashboard = () => {
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${API_ENDPOINTS.PRODUCTS}/${editingProduct._id}`, editingProduct);
-      setMessage('Product updated successfully!');
+      // 确保包含所有字段
+      const updateData = {
+        name: editingProduct.name,
+        url: editingProduct.url,
+        image: editingProduct.image || '',
+        description: editingProduct.description,
+        requiresActivation: editingProduct.requiresActivation
+      };
+      
+      await axios.put(`${API_ENDPOINTS.PRODUCTS}/${editingProduct._id}`, updateData);
+      setMessage('产品更新成功！');
       setEditingProduct(null);
       await fetchProducts();
     } catch (err) {
-      setMessage('Failed to update product.');
+      console.error('更新产品失败:', err);
+      setMessage('更新产品失败，请重试。');
     }
   };
 
@@ -256,12 +270,25 @@ const AdminDashboard = () => {
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${API_ENDPOINTS.USERS.ALL}/${editingUser._id}`, editingUser);
-      setMessage('User updated successfully!');
+      // 构建更新数据，过滤掉空密码字段
+      const updateData = {
+        username: editingUser.username,
+        role: editingUser.role,
+        activatedProducts: editingUser.activatedProducts || []
+      };
+      
+      // 只有在输入了新密码时才更新密码
+      if (editingUser.password && editingUser.password.trim()) {
+        updateData.password = editingUser.password;
+      }
+      
+      await axios.put(`${API_ENDPOINTS.USERS.ALL}/${editingUser._id}`, updateData);
+      setMessage('用户更新成功！');
       setEditingUser(null);
       await fetchUsers();
     } catch (err) {
-      setMessage('Failed to update user.');
+      console.error('更新用户失败:', err);
+      setMessage('更新用户失败，请重试。');
     }
   };
 
@@ -486,7 +513,7 @@ const AdminDashboard = () => {
                   <input
                     type="checkbox"
                     name="requiresActivation"
-                    checked={editingProduct.requiresActivation}
+                    checked={Boolean(editingProduct.requiresActivation)}
                     onChange={(e) => setEditingProduct({ ...editingProduct, requiresActivation: e.target.checked })}
                     className="w-4 h-4 text-brand-600 border-gray-300 rounded focus:ring-brand-500"
                   />
@@ -505,15 +532,35 @@ const AdminDashboard = () => {
                     ) : (
                       <div className="space-y-3">
                         <div className="flex items-start gap-3">
-                          {product.image && (
-                            <img 
-                              src={product.image} 
-                              alt={product.name}
-                              className="w-16 h-16 object-cover rounded-lg"
-                              onError={(e) => {
-                                e.target.style.display = 'none';
-                              }}
-                            />
+                          {product.image && product.image.trim() !== '' ? (
+                            <div className="relative">
+                              <img 
+                                src={product.image} 
+                                alt={product.name}
+                                className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  const placeholder = e.target.nextSibling;
+                                  if (placeholder && placeholder.classList.contains('image-placeholder')) {
+                                    placeholder.style.display = 'flex';
+                                  }
+                                }}
+                                onLoad={(e) => {
+                                  e.target.style.display = 'block';
+                                  const placeholder = e.target.nextSibling;
+                                  if (placeholder && placeholder.classList.contains('image-placeholder')) {
+                                    placeholder.style.display = 'none';
+                                  }
+                                }}
+                              />
+                              <div className="image-placeholder hidden w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg text-gray-400 text-xs">
+                                无图片
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded-lg text-gray-400 text-xs">
+                              无图片
+                            </div>
                           )}
                           <div className="min-w-0 flex-1">
                             <div className="flex items-start justify-between gap-3">
@@ -525,7 +572,7 @@ const AdminDashboard = () => {
                                     href={product.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-sm font-semibold break-words"
+                                    className="text-sm font-semibold break-words text-blue-600 hover:text-blue-800"
                                   >
                                     {product.url}
                                   </a>
