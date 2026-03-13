@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const User = require('../models/User');
 const ActivationCode = require('../models/ActivationCode');
 
