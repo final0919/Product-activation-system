@@ -96,6 +96,42 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
+// @route   PUT api/users/:id
+// @desc    Update a user (Admin)
+// @access  Private
+router.put('/:id', [auth, admin], async (req, res) => {
+  const { username, role, activatedProducts, password } = req.body;
+
+  try {
+    let user = await User.findById(req.params.id);
+    
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    // 更新用户字段
+    if (username !== undefined) user.username = username;
+    if (role !== undefined) user.role = role;
+    if (activatedProducts !== undefined) user.activatedProducts = activatedProducts;
+    
+    // 如果提供了新密码，则更新密码
+    if (password && password.trim()) {
+      const bcrypt = require('bcryptjs');
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    await user.save();
+    
+    // 返回更新后的用户信息（不包含密码）
+    const updatedUser = await User.findById(user._id).select('-password').populate('activatedProducts', ['name']);
+    res.json(updatedUser);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route   DELETE api/users/:id
 // @desc    Delete a user (Admin)
 // @access  Private
