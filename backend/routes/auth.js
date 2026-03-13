@@ -34,7 +34,7 @@ router.post('/register', async (req, res) => {
     user = new User(newUser);
     await user.save();
 
-    res.send('User registered');
+    res.json({ msg: 'User registered', userId: user.id });
 
   } catch (err) {
     console.error(err.message);

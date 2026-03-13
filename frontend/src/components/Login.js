@@ -16,9 +16,11 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     try {
       const res = await axios.post(API_ENDPOINTS.AUTH.LOGIN, formData);
-      onLogin(res.data.token);
+      const token = res.data?.token || res.data;
+      onLogin(token);
     } catch (err) {
-      setError('Invalid Credentials');
+      const errorMsg = err.response?.data?.msg || err.response?.data?.message || err.message || 'Invalid Credentials';
+      setError(errorMsg);
     }
   };
 

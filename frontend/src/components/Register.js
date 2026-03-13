@@ -23,11 +23,12 @@ const Register = () => {
     setError('');
     setMessage('');
     try {
-      await axios.post(API_ENDPOINTS.AUTH.REGISTER, { username, password });
+      const res = await axios.post(API_ENDPOINTS.AUTH.REGISTER, { username, password });
       setMessage('Registration successful! Redirecting to login...');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setError(err.response.data.msg || 'Registration failed');
+      const errorMsg = err.response?.data?.msg || err.response?.data?.message || err.message || 'Registration failed';
+      setError(errorMsg);
     }
   };
 
