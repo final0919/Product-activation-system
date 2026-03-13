@@ -131,9 +131,9 @@ const AdminDashboard = () => {
       
       const reader = new FileReader();
       reader.onload = (event) => {
-        // 检查base64数据大小（限制为1MB）
+        // 检查base64数据大小（限制为500KB）
         const base64Data = event.target.result;
-        if (base64Data.length > 1 * 1024 * 1024) {
+        if (base64Data.length > 500 * 1024) {
           setMessage('图片数据过大，请选择较小的图片或使用URL');
           return;
         }
