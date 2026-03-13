@@ -206,8 +206,9 @@ app.get('/', (req, res) => {
         <div class="panel">
           <div class="panel-title">Frontend URL</div>
           <div class="panel-body">
-            Open <code>http://localhost:3000</code> (React app) after running
-            <code>npm start</code> in the <strong>frontend</strong> folder.
+             Production: <code>https://your-vercel-app.vercel.app</code><br />
+             Development: <code>http://localhost:3000</code><br />
+             <small>Replace with your actual Vercel domain</small>
           </div>
         </div>
         <div class="panel">
