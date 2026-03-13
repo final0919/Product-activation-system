@@ -187,6 +187,7 @@ const Products = () => {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => {
+            // eslint-disable-next-line no-unused-vars
             const isActivated = isProductActivated(product._id);
             const canAccess = canAccessProduct(product);
             
